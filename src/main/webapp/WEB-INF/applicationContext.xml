@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="url" value="jdbc:mysql://localhost:3306/album">
+        </property>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+     </bean>
+     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+         <property name="dataSource">
+             <ref bean="dataSource"/>
+         </property>
+         <property name="mappingResources">
+             <list>
+                 <value>User.hbm.xml</value>
+                 <value>Photo.hbm.xml</value>
+             </list>
+         </property>
+         <property name="hibernateProperties">
+             <props>
+                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                 <prop key="hibernate.show_sql">true</prop>
+             </props>
+         </property>
+     </bean>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+<!--    <bean id="service" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="add">PROPAGATION_REQUIRED</prop>
+                <prop key="find">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
+        </property>
+    </bean>-->
+    <bean id="userDao" class="cn.tsuki.album.dao.impl.UserDaoHibernate">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+    <bean id="photoDao" class="cn.tsuki.album.dao.impl.PhotoDaoHibernate">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+    <bean id="AlbumService" class="cn.tsuki.album.service.impl.AlbumServiceImpl">
+        <property name="userDao">
+            <ref bean="userDao"/>
+        </property>
+        <property name="photoDao">
+            <ref bean="photoDao"/>
+        </property>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>

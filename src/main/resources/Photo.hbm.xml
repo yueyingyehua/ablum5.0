@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Hibernate映射文件的根元素 -->
+<hibernate-mapping package="cn.tsuki.album.domain">
+    <!--每个class元素映射一个持久化类-->
+    <!--标识一个类的xml映射， name为类名，table为表名-->
+    <class name="Photo" table="photo_inf">
+        <!--指定主键生成器策略，generator标识主键生成方式 column为数据库对应列-->
+        <id name="id" type="int" column="photo_id">
+            <generator class="identity"/>
+        </id>
+        <!--映射普通属性-->
+        <property name="title" type="string"/>
+        <property name="fileName" type="string"/>
+        <!--映射和User实体类的N-1关联
+            user_id它是对应实体，如果加property-ref=DistrictId，效果是一样！此属性用在有联合主键的时候-->
+        <many-to-one class="User" name="user" column="owner_id"  not-null="true"/>
+    </class>
+    <!--注解：
+            当column不指定的时候默认是和name相同
+            <proprety>简单的配置标签，<many-to-one>多对一的配置标签
+            name="user"，这个代表该类字段，不同的是class="User",他的类型没有用type，而是class。因为不是一个简单数据类型-->
+</hibernate-mapping>
