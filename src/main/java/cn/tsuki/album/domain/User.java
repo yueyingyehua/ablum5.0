@@ -7,7 +7,7 @@ import java.util.Set;
  * Created by tsuki on 2017/4/9.
  */
 public class User {
-    private int id;
+    private Integer id;
     private String name;
     private String password;
     private Set<Photo> photos = new HashSet<Photo>();
@@ -23,11 +23,11 @@ public class User {
 
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

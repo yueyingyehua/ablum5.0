@@ -31,7 +31,9 @@ public class GetPhotoServlet extends BaseServlet{
         PrintWriter out = response.getWriter();
         try {
             //?为什么这里可以使用name
+            System.out.println("111");
             List<PhotoHolder> photos = albumService.getPhotoByUser(name, curPage);
+            System.out.println("222");
             //清空id为list的元素
             out.println("var list = $('#list').empty();");
             for (PhotoHolder photoHolder : photos) {
