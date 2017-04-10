@@ -90,7 +90,7 @@ public class ProUploadServlet extends BaseServlet {
                         fileOutputStream.close();
                         albumService.addPhoto(user, title, serverFileName + suffix);
                         out.write("<script type='text/javascript'>" +
-                                "parent.callback('恭喜你，文件上传成功！'" +
+                                "parent.callback('恭喜你，文件上传成功！')" +
                                 "</script>");
 
                     } else {
