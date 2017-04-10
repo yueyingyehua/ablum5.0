@@ -23,7 +23,7 @@ public class GetPhotoServlet extends BaseServlet{
         HttpSession session = request.getSession(true);
         //从HttpSession中获取系统当前用户、相片列表的当前页码
         String name = (String) session.getAttribute("curUser");
-        Object pageObj = session.getAttribute("curUser");
+        Object pageObj = session.getAttribute("curPage");
         //如果HttpSession中的curPage为null，则设置当前为第一页
         int curPage = pageObj == null ? 1 : (Integer) pageObj;
         response.setContentType("text/javascript;charset=gbk");
@@ -35,13 +35,14 @@ public class GetPhotoServlet extends BaseServlet{
             List<PhotoHolder> photos = albumService.getPhotoByUser(name, curPage);
             System.out.println("222");
             //清空id为list的元素
+
             out.println("var list = $('#list').empty();");
             for (PhotoHolder photoHolder : photos) {
                 //将每个相片动态添加到id为list的元素中
                 out.println("list.append(\"<div align='center'>" +
                         "<a href='javascript:void(0)' onclick=\\\"showImg('"
                         + photoHolder.getFileName() + "');\\\">"
-                        + photoHolder.getTitle() + "</a></div>\")l");
+                        + photoHolder.getTitle() + "</a></div>\");");
 
             }
         } catch (AlbumException ex) {

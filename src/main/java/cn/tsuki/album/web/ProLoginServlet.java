@@ -20,6 +20,8 @@ public class ProLoginServlet extends BaseServlet{
     {
         String name = request.getParameter("user");
         String password = request.getParameter("password");
+        System.out.println("proLogin: user:"+name+"password:"+password);
+        response.setContentType("text/javascript;charset=gbk");
         //获取输出流
         PrintWriter out = response.getWriter();
         try{
@@ -29,8 +31,8 @@ public class ProLoginServlet extends BaseServlet{
                 HttpSession session = request.getSession(true);
                 session.setAttribute("curUser", name);
                 out.println("alert('您已经登录成功！')");
-                out.println("$('#noLogin').hide(500)");
-                out.println("$('#haslogin').show(500)");
+                out.println("$(\"#noLogin\").hide(500);");
+                out.println("$(\"#hasLogin\").show(500);");
                 //调用获取相片列表的方法
                 out.println("onLoadHandler();");
             }else{

@@ -29,6 +29,7 @@ public class ProUploadServlet extends BaseServlet {
         Iterator iterator = null;
         String title = null;
         response.setContentType("text/html;charset=gbk");
+        System.out.println("上传文件");
         //获取输出流
         PrintWriter out = response.getWriter();
         try {
@@ -50,24 +51,36 @@ public class ProUploadServlet extends BaseServlet {
                 //如果是需要上传的文件
                 else {
                     String user = (String) request.getSession()
-                            .getAttribute("cutUSer");
+                            .getAttribute("curUser");
+                    System.out.println("uploadUser: " + user);
                     String serverFileName = null;
                     //返回文件名
                     String fileName = item.getName();
+                    System.out.println("filename:" + fileName);
                     //取得文件后缀
                     String suffix = fileName.substring(fileName.lastIndexOf("."));
+                    System.out.println("suffix:" + suffix);
                     //返回文件类型
                     String contentType = item.getContentType();
+                    System.out.println("contentType:" + contentType);
+
                     //只允许上传jpg、gif、png图片
                     if (contentType.equals("image/pjpeg")
                             || contentType.equals("image/gif")
                             || contentType.equals("image/jpeg")
                             || contentType.equals("image/png")) {
+                        System.out.println("if语句");
+
                         InputStream inputStream = item.getInputStream();
+                        System.out.println("inpitStream: "+inputStream);
                         serverFileName = UUID.randomUUID().toString();
-                        FileOutputStream fileOutputStream = new FileOutputStream(
-                                getServletContext().getRealPath("/")
-                                        + "uploadfiles\\" + serverFileName + suffix);
+                        System.out.println(getServletContext().getRealPath("/")
+                                + "uploadfiles\\" + serverFileName + suffix);
+                        String filepath = getServletContext().getRealPath("/")
+                                + "uploadfiles\\" + serverFileName + suffix;
+                        FileOutputStream fileOutputStream = new FileOutputStream(filepath);
+
+                        System.out.println("hshdaa");
                         byte[] buffer = new byte[1024];
                         int len = 0;
                         while ((len = inputStream.read(buffer)) > 0) {
