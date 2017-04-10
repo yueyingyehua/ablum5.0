@@ -92,6 +92,7 @@ public class ProUploadServlet extends BaseServlet {
                         out.write("<script type='text/javascript'>" +
                                 "parent.callback('恭喜你，文件上传成功！')" +
                                 "</script>");
+                        
 
                     } else {
                         out.write("<script type='text/javascript'>" +
