@@ -17,7 +17,6 @@ public class BaseServlet extends HttpServlet{
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
-//        ApplicationContext context = new ClassPathXmlApplicationContext("resources/applicationContext.xml");
         ApplicationContext context = WebApplicationContextUtils
                 .getWebApplicationContext(getServletContext());
         albumService = (AlbumService) context.getBean("AlbumService");

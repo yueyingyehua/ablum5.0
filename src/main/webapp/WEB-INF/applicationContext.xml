@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!--数据源-->
+    <!--数据源使用-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">
             <value>com.mysql.jdbc.Driver</value>
@@ -13,49 +13,56 @@
         <property name="username" value="root"/>
         <property name="password" value="123456"/>
      </bean>
+
+    <!--定义Hibernate的SessionFactory-->
      <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
          <property name="dataSource">
              <ref bean="dataSource"/>
          </property>
+         <!--mappingResouces属性用来列出全部映射文件-->
          <property name="mappingResources">
              <list>
+                 <!--以下用来列出Hibernate映射文件-->
                  <value>User.hbm.xml</value>
                  <value>Photo.hbm.xml</value>
              </list>
          </property>
+         <!--定义Hibernate的Session的属性-->
          <property name="hibernateProperties">
              <props>
+                 <!--指定数据库方言-->
                  <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                 <!--显示Hibernate持久化操作所生成的SQL-->
                  <prop key="hibernate.show_sql">true</prop>
              </props>
          </property>
      </bean>
+    <!--配置Hibernate的局部事务管理器，使用HibernateTransactionManager类-->
+    <!--该类实现PlatformTransactionManager接口，是针对Hibernate的特定实现-->
+    <!--配置HibernateTransactionManager是需要依赖注入SessionFactory的引用-->
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
     </bean>
-<!--    <bean id="service" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="transactionAttributes">
-            <props>
-                <prop key="add">PROPAGATION_REQUIRED</prop>
-                <prop key="find">PROPAGATION_REQUIRED,readOnly</prop>
-            </props>
-        </property>
-    </bean>-->
+
+    <!--配置userDao组件
+            为userDao组件注入SessionFactory实例-->
     <bean id="userDao" class="cn.tsuki.album.dao.impl.UserDaoHibernate">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
     </bean>
+    <!--配置PhotoDao组件
+            为PhotoDao组件注入SessionFactory实例-->
     <bean id="photoDao" class="cn.tsuki.album.dao.impl.PhotoDaoHibernate">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
     </bean>
+    <!--配置AlbumService业务逻辑组件
+            为业务逻辑组件注入2个DAO组件
+                该组件是在BaseServlet中上下文（context）获取bean时加载的-->
     <bean id="AlbumService" class="cn.tsuki.album.service.impl.AlbumServiceImpl">
         <property name="userDao">
             <ref bean="userDao"/>
@@ -65,6 +72,8 @@
         </property>
     </bean>
 
+    <!--解决org.hibernate.HibernateException: Could not obtain transaction-synchronized Session for current thread错误
+        作用：开启注解的方式-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>
