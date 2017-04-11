@@ -17,20 +17,26 @@ import java.io.PrintWriter;
 public class PageLoadServlet extends BaseServlet {
     public void service(HttpServletRequest request, HttpServletResponse response)throws IOException,ServletException {
         response.setContentType("text/javascript;charset=gbk");
+        System.out.println("接受到pageLoad请求");
         //获取输出流
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(true);
         String name = (String) session.getAttribute("curUser");
+
         //如果name不为null，表明用户已经登录
         if (name != null)
         {
+            System.out.println("name!= null");
             //隐藏id为noLogin的元素（用户登录面版）
-            out.println("$('#noLogin').hide()");
-            out.println("S('#hasLogin').show()");
+            out.println("$('#noLogin').hide(500);");
+            out.println("$('#hasLogin').show(500);");
             out.println("onLoadHandler();");
+
+
             String curImg = (String) session.getAttribute("curImg");
             if (curImg != null) {
-                out.println("$('#show').attr('src', 'uploadfiles/"
+                System.out.println("curImg != null");
+                out.println("$('#show').attr('src', 'http://oo8ecv0l9.bkt.clouddn.com/"
                         + curImg + "');");
             }
         }

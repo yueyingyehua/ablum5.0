@@ -31,9 +31,7 @@ public class GetPhotoServlet extends BaseServlet{
         PrintWriter out = response.getWriter();
         try {
             //?为什么这里可以使用name
-            System.out.println("111");
             List<PhotoHolder> photos = albumService.getPhotoByUser(name, curPage);
-            System.out.println("222");
             //清空id为list的元素
 
             out.println("var list = $('#list').empty();");
@@ -43,7 +41,6 @@ public class GetPhotoServlet extends BaseServlet{
                         "<a href='javascript:void(0)' onclick=\\\"showImg('"
                         + photoHolder.getFileName() + "');\\\">"
                         + photoHolder.getTitle() + "</a></div>\");");
-
             }
         } catch (AlbumException ex) {
             out.println("alert('" + ex.getMessage() + "请重试！')");

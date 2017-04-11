@@ -71,17 +71,13 @@ public class ProUploadServlet extends BaseServlet {
                 else {
                     String user = (String) request.getSession()
                             .getAttribute("curUser");
-                    System.out.println("uploadUser: " + user);
                     String serverFileName = null;
                     //返回文件名
                     String fileName = item.getName();
-                    System.out.println("filename:" + fileName);
                     //取得文件后缀
                     String suffix = fileName.substring(fileName.lastIndexOf("."));
-                    System.out.println("suffix:" + suffix);
                     //返回文件类型
                     String contentType = item.getContentType();
-                    System.out.println("contentType:" + contentType);
 
                     //只允许上传jpg、gif、png图片
                     if (contentType.equals("image/pjpeg")
@@ -90,7 +86,6 @@ public class ProUploadServlet extends BaseServlet {
                             || contentType.equals("image/png")) {
 
                         InputStream inputStream = item.getInputStream();
-                        System.out.println("inpitStream: "+inputStream.toString());
                         serverFileName = UUID.randomUUID().toString() + suffix;
                       /*  String filepath = getServletContext().getRealPath("/")
                                 + "uploadfiles\\" + serverFileName + suffix;*/
